@@ -17,6 +17,10 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+/**
+ * @author Tanmay
+ *
+ */
 public class Plus {
 	private WebDriver driver;
 	private Properties prop = new Properties();
