@@ -14,9 +14,9 @@ public class Sample {
 	
 	@Test(description = "Sample Description", 
 			dataProviderClass= ExcelReader.class,
-			dataProvider = "EXCEL")
+			dataProvider = "EXCEL" )
 	@MSEXCEL(file = "src/test/resources/data/data1.xlsx", 
-			sheet ="Sheet2")
+			sheet ="Sheet2" , format ="FIRSTYES")
 	public void doTest(HashMap<String, String> testdata){
 		System.out.println(testdata);
 	}

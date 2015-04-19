@@ -79,34 +79,79 @@ public class ExcelReader {
             while (rowIterator2.hasNext()){
             	Row row = rowIterator2.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
-                while (cellIterator.hasNext())
-                {
-                	cellIterator.next();   
-                }
+                if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
+                	boolean isDataRow = false;
+                	int i=0;
+                	while (cellIterator.hasNext())
+                    {
+                		Cell cell =cellIterator.next(); 
+                    	if(i==0 && cell.toString().trim().equalsIgnoreCase("YES")){
+                   			isDataRow = true;
+                   			break;
+                   		}
+                    }
+                	if(isDataRow){
+                		colEx1++;
+                	} 
+                }else{
+                	while (cellIterator.hasNext())
+                    {
+                    	cellIterator.next();   
+                    }
+                	colEx1++;
+                }                
+            } 
+            if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
             	colEx1++;
-            }            
+            }
             Object[][] data = new Object[colEx1-1][1];            
             int colEx = 0;
+            int colExYes = 0;
             while (rowIterator.hasNext())
             {
                 Row row = rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
                	HashMap<String, String> hm = new HashMap<String, String>();
                	int i =0;
-               	while (cellIterator.hasNext())
-                {
-                   	Cell cell = cellIterator.next();
-                   	if(colEx==0){
-                   		rowTitle.add(cell.toString());
-                   	}else{
-                   		hm.put(rowTitle.get(i), cell.toString());
-                   	}
-                   	i++; 
-               }
-               if(colEx!=0){
-               		data[colEx-1][0] =hm;
-               }               
-               colEx ++;             
+               	if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
+               		boolean isDataRow = false;
+               		while (cellIterator.hasNext())
+                    {
+                       	Cell cell = cellIterator.next();
+                       	if(colEx==0){
+                       		rowTitle.add(cell.toString());
+                       	}else if(colEx!=0){
+                       		if(i==0 && cell.toString().trim().equalsIgnoreCase("YES")){
+                       			isDataRow = true;
+                       		}if(isDataRow){
+                       			hm.put(rowTitle.get(i), cell.toString());
+                       		}
+                       		// hm.put(rowTitle.get(i), cell.toString());
+                       	}
+                       	i++; 
+                   }
+                   if(colEx!=0 && isDataRow){
+                   		data[colExYes][0] =hm;
+                   		colExYes++;
+                   }               
+                   colEx ++; 
+               	}else{
+               		while (cellIterator.hasNext())
+                    {
+                       	Cell cell = cellIterator.next();
+                       	if(colEx==0){
+                       		rowTitle.add(cell.toString());
+                       	}else{
+                       		hm.put(rowTitle.get(i), cell.toString());
+                       	}
+                       	i++; 
+                   }
+                   if(colEx!=0){
+                   		data[colEx-1][0] =hm;
+                   }               
+                   colEx ++; 
+               	}
+               	            
             }
             file.close();
             workbook.close();
@@ -123,80 +168,99 @@ public class ExcelReader {
 	public static Object[][] xlsReader(String filename,String sheetName,String format){
 		try
         {
-            FileInputStream file = new FileInputStream(new File(filename));
+			FileInputStream file = new FileInputStream(new File(filename));
             HSSFWorkbook workbook = new HSSFWorkbook(file);
             HSSFSheet sheet = workbook.getSheet(sheetName);
             Iterator<Row> rowIterator = sheet.iterator(); 
             Iterator<Row> rowIterator2 = sheet.iterator(); 
-            ArrayList<ArrayList<String>> rowExl = new ArrayList<ArrayList<String>>(); 
-            
+                                  
             int colEx1 = 0;
             ArrayList<String> rowTitle = new ArrayList<String>();
             while (rowIterator2.hasNext()){
             	Row row = rowIterator2.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
-                while (cellIterator.hasNext())
-                {
-                	cellIterator.next();   
-                }
+                if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
+                	boolean isDataRow = false;
+                	int i=0;
+                	while (cellIterator.hasNext())
+                    {
+                		Cell cell =cellIterator.next(); 
+                    	if(i==0 && cell.toString().trim().equalsIgnoreCase("YES")){
+                   			isDataRow = true;
+                   			break;
+                   		}
+                    }
+                	if(isDataRow){
+                		colEx1++;
+                	} 
+                }else{
+                	while (cellIterator.hasNext())
+                    {
+                    	cellIterator.next();   
+                    }
+                	colEx1++;
+                }                
+            } 
+            if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
             	colEx1++;
-            }            
-            Object[][] data = new Object[colEx1-1][1];  
-            
+            }
+            Object[][] data = new Object[colEx1-1][1];            
             int colEx = 0;
+            int colExYes = 0;
             while (rowIterator.hasNext())
             {
                 Row row = rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
-                ArrayList<String> rowSing = new ArrayList<String>();  
-                HashMap<String, String> hm = new HashMap<String, String>();
-                
-                if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
-                	int i = 0 ;
-                	boolean isDataRow = false;
-                	while (cellIterator.hasNext())
+               	HashMap<String, String> hm = new HashMap<String, String>();
+               	int i =0;
+               	if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){               		
+               		boolean isDataRow = false;
+               		while (cellIterator.hasNext())
                     {
-                		Cell cell = cellIterator.next();
-                		// Add header
-                		if(colEx==0 && i!=0){
-                			isDataRow = true;
-                			rowSing.add(cell.toString()); 
-                		}
-                		if(colEx!=0 && i==0 && 
-                				cell.toString().trim().equalsIgnoreCase("YES")){
-                			isDataRow = true;
-                			// No need to add yes value
-                			//rowSing.add(cell.toString()); 
-                    	}else if(colEx!=0 && i!=0){
-                    		rowSing.add(cell.toString()); 
-                    	}else if(colEx!=0 ){
-                    		break;
-                    	}  
-                        i++;
-                    }
-                	if(isDataRow){
-                		rowExl.add(rowSing);
-                	}
-                }else{
-                	while (cellIterator.hasNext())
+                       	Cell cell = cellIterator.next();
+                       	if(colEx==0){
+                       		rowTitle.add(cell.toString());
+                       	}else if(colEx!=0){
+                       		if(i==0 && cell.toString().trim().equalsIgnoreCase("YES")){
+                       			isDataRow = true;
+                       		}if(isDataRow){
+                       			hm.put(rowTitle.get(i), cell.toString());
+                       		}
+                       		// hm.put(rowTitle.get(i), cell.toString());
+                       	}
+                       	i++; 
+                   }
+                   if(colEx!=0 && isDataRow){
+                   		data[colExYes][0] =hm;
+                   		colExYes++;
+                   }               
+                   colEx ++; 
+               	}else{
+               		while (cellIterator.hasNext())
                     {
-                    	Cell cell = cellIterator.next();
-                    	rowSing.add(cell.toString());   
-                    }
-                	rowExl.add(rowSing);
-                }                
-                colEx ++;             
+                       	Cell cell = cellIterator.next();
+                       	if(colEx==0){
+                       		rowTitle.add(cell.toString());
+                       	}else{
+                       		hm.put(rowTitle.get(i), cell.toString());
+                       	}
+                       	i++; 
+                   }
+                   if(colEx!=0){
+                   		data[colEx-1][0] =hm;
+                   }               
+                   colEx ++; 
+               	}
+               	            
             }
             file.close();
-           
-            Object[][] obj = {{rowExl},{rowExl}};
-            return obj;
+            workbook.close();
+            return data;            
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 		return null;
-	}
-	
+	}	
 }
