@@ -27,7 +27,7 @@ import org.testng.annotations.DataProvider;
  * @author Tanmay Sarkar
  * @since 6th March 2015
  */
-public class ExcelReader {
+public class DataReader {
 	
 	/**
 	 * @param String file : excel file name<br/>
@@ -37,7 +37,7 @@ public class ExcelReader {
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.METHOD})
-	public @interface MSEXCEL
+	public @interface SELEVANCEDATA
 	{
 		String file();
 		String sheet();
@@ -47,7 +47,7 @@ public class ExcelReader {
 	
 	@DataProvider(name = "EXCEL", parallel = true)
 	public static Object[][] XLDataProvider(Method method) {		
-		MSEXCEL testData = method.getAnnotation(MSEXCEL.class);	
+		SELEVANCEDATA testData = method.getAnnotation(SELEVANCEDATA.class);	
 		String fileName =testData.file(); 
 		String sheetName = testData.sheet();
 		String format = testData.format();
