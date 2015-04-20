@@ -31,8 +31,7 @@ public class Sample {
 			dataProvider = "EXCEL" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xlsx", 
 			sheet ="Sheet2" , format ="FIRSTYES")
-	public void doTest(HashMap<String, String> testdata){
-		System.out.println(testdata);
+	public void doTest(HashMap<String, String> testdata){		
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
