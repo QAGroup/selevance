@@ -28,10 +28,25 @@ public class Sample {
 	
 	@Test(description = "Sample Description", 
 			dataProviderClass= DataReader.class,
-			dataProvider = "EXCEL" )
+			dataProvider = "EMV" )
+	@SELEVANCEDATA(file = "src/test/resources/data/data1.xml")
+	public void doTest(HashMap<String, String> testdata){	
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		baseUrl = "http://google.co.in";		
+		Plus plus = new Plus(globalConfig);
+		plus.driver().get(baseUrl);
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
+		Util.sleep(5000);
+		plus.driver().quit();
+	}
+	
+	@Test(description = "Sample Description", 
+			dataProviderClass= DataReader.class,
+			dataProvider = "EMV" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xlsx", 
 			sheet ="Sheet2" , format ="FIRSTYES")
-	public void doTest(HashMap<String, String> testdata){		
+	public void doTest2(HashMap<String, String> testdata){		
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);

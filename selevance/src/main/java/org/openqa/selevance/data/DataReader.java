@@ -13,6 +13,11 @@ import java.util.Iterator;
 
 
 
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,6 +26,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Read Excel File for Test data
@@ -40,12 +49,12 @@ public class DataReader {
 	public @interface SELEVANCEDATA
 	{
 		String file();
-		String sheet();
+		String sheet() default "test";
 		String format() default "BASE";
 		// FIRSTYES - If only First column is YES
 	}
 	
-	@DataProvider(name = "EXCEL", parallel = true)
+	@DataProvider(name = "EMV", parallel = true)
 	public static Object[][] XLDataProvider(Method method) {		
 		SELEVANCEDATA testData = method.getAnnotation(SELEVANCEDATA.class);	
 		String fileName =testData.file(); 
@@ -59,6 +68,9 @@ public class DataReader {
 			return obj;
 		}if(fileName.contains(".xls")){
 			Object[][] obj = xlsReader(fileName,sheetName,format);
+			return obj;
+		}if(fileName.contains(".xml")){
+			Object[][] obj = xmlReader(fileName,sheetName,format);
 			return obj;
 		}else{
 			return null;
@@ -262,5 +274,43 @@ public class DataReader {
             e.printStackTrace();
         }
 		return null;
-	}	
+	}
+	public static Object[][] xmlReader(String filename,String sheetName,String format){
+		try {
+
+			 File stocks = new File(filename);
+			 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			 
+			  
+			 Document doc = dBuilder.parse(stocks);
+			 doc.getDocumentElement().normalize();
+
+			 NodeList nodes = doc.getElementsByTagName(sheetName);
+			 
+			 int length = nodes.getLength();
+			 //System.out.println(length);
+			 Object[][] data = new Object[length][1]; 
+			 
+			 for (int i = 0; i < nodes.getLength(); i++) 
+			 {
+				 Map<String, String> mMap = new HashMap<String, String>();
+				 Node node = nodes.item(i);				 
+				 Element element = (Element)node;				 
+				 NodeList n = element.getElementsByTagNameNS("*","*");
+				 
+				 for(int j= 0 ; j< n.getLength() ; j++)
+				 {
+					 mMap.put(n.item(j).getNodeName()
+							 , element.getElementsByTagName(n.item(j).getNodeName()).item(0).getTextContent());
+				 }	
+				 data[i][0] = mMap;
+			 }
+			 return data;			 
+		} 
+		 catch (Exception ex) {
+			 ex.printStackTrace();
+			 return null;
+		}
+	}
 }
