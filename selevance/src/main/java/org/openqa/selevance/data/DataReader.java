@@ -32,15 +32,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Read Excel File for Test data
+ * Read Excel/XML/CSV/JSON File for Test data
  * @author Tanmay Sarkar
  * @since 6th March 2015
  */
 public class DataReader {
 	
 	/**
-	 * @param String file : excel file name<br/>
-	 * @param String sheet : excel sheet name	<br/>
+	 * @param String file : Test Data file name (*.xls / *.xlsx / *.csv / *.json) <br/>
+	 * @param String sheet : For excel sheet name , use node name for XML	<br/>
 	 * 
 	 * @author Tanmay Sarkar
 	 */
@@ -54,7 +54,7 @@ public class DataReader {
 		// FIRSTYES - If only First column is YES
 	}
 	
-	@DataProvider(name = "EMV", parallel = true)
+	@DataProvider(name = "STANDARD", parallel = true)
 	public static Object[][] XLDataProvider(Method method) {		
 		SELEVANCEDATA testData = method.getAnnotation(SELEVANCEDATA.class);	
 		String fileName =testData.file(); 

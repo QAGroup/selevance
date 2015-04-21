@@ -12,8 +12,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * @author Tanmay
- *
+ * @author Tanmay Sarkar
  */
 public class Sample {
 	
@@ -28,7 +27,7 @@ public class Sample {
 	
 	@Test(description = "Sample Description", 
 			dataProviderClass= DataReader.class,
-			dataProvider = "EMV" )
+			dataProvider = "STANDARD" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xml")
 	public void doTest(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
@@ -43,7 +42,7 @@ public class Sample {
 	
 	@Test(description = "Sample Description", 
 			dataProviderClass= DataReader.class,
-			dataProvider = "EMV" )
+			dataProvider = "STANDARD" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xlsx", 
 			sheet ="Sheet2" , format ="FIRSTYES")
 	public void doTest2(HashMap<String, String> testdata){		
