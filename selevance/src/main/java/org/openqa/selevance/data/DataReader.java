@@ -1,7 +1,9 @@
 package org.openqa.selevance.data;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,6 +26,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.w3c.dom.Document;
@@ -71,6 +76,12 @@ public class DataReader {
 			return obj;
 		}if(fileName.contains(".xml")){
 			Object[][] obj = xmlReader(fileName,sheetName,format);
+			return obj;
+		}if(fileName.contains(".csv")){
+			Object[][] obj = csvReader(fileName,sheetName,format);
+			return obj;
+		}if(fileName.contains(".json")){
+			Object[][] obj = jsonReader(fileName,sheetName,format);
 			return obj;
 		}else{
 			return null;
@@ -307,6 +318,68 @@ public class DataReader {
 				 data[i][0] = mMap;
 			 }
 			 return data;			 
+		} 
+		 catch (Exception ex) {
+			 ex.printStackTrace();
+			 return null;
+		}
+	}
+	public static Object[][] csvReader(String filename,String sheetName,String format){
+		try {
+			String csvFile = filename;
+			BufferedReader br = null;
+			BufferedReader br1 = null;
+			String line = "";
+			String cvsSplitBy = ",";
+			
+			
+			br = new BufferedReader(new FileReader(csvFile));
+			int length = 0;
+			while ((line = br.readLine()) != null) {	
+				length++;
+			}
+			Object[][] data = new Object[length-1][1]; // -1 for header
+			br.close();
+			br1 = new BufferedReader(new FileReader(csvFile));
+			int len =0;
+			ArrayList<String> rowTitle = new ArrayList<String>();			
+			while ((line = br1.readLine()) != null) {	
+				String[] eachline = line.split(cvsSplitBy);
+				Map<String, String> maps = new HashMap<String, String>();
+				if(len==0){
+					for(int k=0;k<eachline.length;k++){
+						rowTitle.add(eachline[k]);
+					}					
+				}else{
+					for(int k=0;k<eachline.length;k++){
+						maps.put(rowTitle.get(k), eachline[k]);
+					}	
+					data[len-1][0]=maps;
+				}
+				len++;
+			}
+			br1.close();
+			return data;
+		} 
+		 catch (Exception ex) {
+			 ex.printStackTrace();
+			 return null;
+		}
+	}
+	public static Object[][] jsonReader(String filename,String sheetName,String format){
+		try {
+			JSONParser parser = new JSONParser();
+			JSONArray a = (JSONArray) parser.parse(new FileReader(filename));
+			int length = a.size();
+			Object[][] data = new Object[length][1];
+			int i=0;
+			  for (Object o : a)
+			  {
+				  JSONObject person = (JSONObject) o;
+				  data[i][0] = person;
+				  i++;
+			  }
+			  return data;
 		} 
 		 catch (Exception ex) {
 			 ex.printStackTrace();

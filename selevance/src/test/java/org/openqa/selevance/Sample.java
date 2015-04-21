@@ -25,11 +25,11 @@ public class Sample {
 		globalConfig = config;		
 	}
 	
-	@Test(description = "Sample Description", 
+	@Test(description = "Sample Test case with XML Test data", 
 			dataProviderClass= DataReader.class,
 			dataProvider = "STANDARD" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xml")
-	public void doTest(HashMap<String, String> testdata){	
+	public void doTest1(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
@@ -40,12 +40,58 @@ public class Sample {
 		plus.driver().quit();
 	}
 	
-	@Test(description = "Sample Description", 
+	@Test(description = "Sample Test case with XLS Test data", 
+			dataProviderClass= DataReader.class,
+			dataProvider = "STANDARD" )
+	@SELEVANCEDATA(file = "src/test/resources/data/data1.xls", 
+			sheet ="Sheet2" , format ="FIRSTYES")
+	public void doTest2(HashMap<String, String> testdata){		
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		baseUrl = "http://google.co.in";		
+		Plus plus = new Plus(globalConfig);
+		plus.driver().get(baseUrl);
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
+		Util.sleep(5000);
+		plus.driver().quit();
+	}
+	
+	@Test(description = "Sample Test case with XLSX Test data", 
 			dataProviderClass= DataReader.class,
 			dataProvider = "STANDARD" )
 	@SELEVANCEDATA(file = "src/test/resources/data/data1.xlsx", 
 			sheet ="Sheet2" , format ="FIRSTYES")
-	public void doTest2(HashMap<String, String> testdata){		
+	public void doTest3(HashMap<String, String> testdata){		
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		baseUrl = "http://google.co.in";		
+		Plus plus = new Plus(globalConfig);
+		plus.driver().get(baseUrl);
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
+		Util.sleep(5000);
+		plus.driver().quit();
+	}
+	
+	@Test(description = "Sample Test case with CSV Test data", 
+			dataProviderClass= DataReader.class,
+			dataProvider = "STANDARD" )
+	@SELEVANCEDATA(file = "src/test/resources/data/data1.csv")
+	public void doTest4(HashMap<String, String> testdata){	
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;		
+		baseUrl = "http://google.co.in";		
+		Plus plus = new Plus(globalConfig);
+		plus.driver().get(baseUrl);
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
+		Util.sleep(5000);
+		plus.driver().quit();
+	}
+	
+	@Test(description = "Sample Test case with JSON Test data",
+			dataProviderClass= DataReader.class,
+			dataProvider = "STANDARD" )
+	@SELEVANCEDATA(file = "src/test/resources/data/data1.json")
+	public void doTest5(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
