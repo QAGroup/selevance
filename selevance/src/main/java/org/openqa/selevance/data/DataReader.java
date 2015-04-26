@@ -16,6 +16,8 @@ import java.util.Iterator;
 
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,7 +39,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Read Excel/XML/CSV/JSON File for Test data
+ * Read XLSX/XLS/XML/CSV/JSON File for Test data
  * @author Tanmay Sarkar
  * @since 6th March 2015
  */
@@ -62,25 +64,51 @@ public class DataReader {
 	@DataProvider(name = "STANDARD", parallel = true)
 	public static Object[][] XLDataProvider(Method method) {		
 		SELEVANCEDATA testData = method.getAnnotation(SELEVANCEDATA.class);	
-		String fileName =testData.file(); 
+		String fileName =testData.file().toLowerCase(); 
 		String sheetName = testData.sheet();
 		String format = testData.format();
 		if(fileName.trim().length() == 0 || sheetName.trim().length() == 0){
 			throw new SkipException(method.getName() + " : All Parameters are required");
 		}
-		if(fileName.contains(".xlsx")){
+		Matcher matcher;
+	    Pattern pattern;
+	    
+		String regexXLSX ="(.*).xlsx$";		
+	    pattern = Pattern.compile(regexXLSX);
+	    matcher = pattern.matcher(fileName);	       
+		if(matcher.matches()){
 			Object[][] obj = xlsxReader(fileName,sheetName,format);
 			return obj;
-		}if(fileName.contains(".xls")){
+		}
+		
+		String regexXLS ="(.*).xls$";		
+	    pattern = Pattern.compile(regexXLS);
+	    matcher = pattern.matcher(fileName);
+		if(matcher.matches()){
 			Object[][] obj = xlsReader(fileName,sheetName,format);
 			return obj;
-		}if(fileName.contains(".xml")){
+		}
+		
+		String regexXML ="(.*).xml$";		
+	    pattern = Pattern.compile(regexXML);
+	    matcher = pattern.matcher(fileName);
+		if(matcher.matches()){
 			Object[][] obj = xmlReader(fileName,sheetName,format);
 			return obj;
-		}if(fileName.contains(".csv")){
+		}
+		
+		String regexCSV ="(.*).csv$";		
+	    pattern = Pattern.compile(regexCSV);
+	    matcher = pattern.matcher(fileName);
+		if(matcher.matches()){
 			Object[][] obj = csvReader(fileName,sheetName,format);
 			return obj;
-		}if(fileName.contains(".json")){
+		}
+		
+		String regexJSON ="(.*).json$";		
+	    pattern = Pattern.compile(regexJSON);
+	    matcher = pattern.matcher(fileName);
+		if(matcher.matches()){
 			Object[][] obj = jsonReader(fileName,sheetName,format);
 			return obj;
 		}else{
