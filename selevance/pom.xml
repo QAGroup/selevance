@@ -4,7 +4,7 @@
 
   <groupId>org.openqa.selevance</groupId>
   <artifactId>selevance</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>selevance</name>
