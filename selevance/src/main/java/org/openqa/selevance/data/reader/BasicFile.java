@@ -1,23 +1,13 @@
-package org.openqa.selevance.data;
+package org.openqa.selevance.data.reader;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-
-
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,92 +21,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.testng.SkipException;
-import org.testng.annotations.DataProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Read XLSX/XLS/XML/CSV/JSON File for Test data
- * @author Tanmay Sarkar
- * @since 6th March 2015
- */
-public class DataReader {
-	
-	/**
-	 * @param String file : Test Data file name (*.xls / *.xlsx / *.csv / *.json) <br/>
-	 * @param String sheet : For excel sheet name , use node name for XML	<br/>
-	 * 
-	 * @author Tanmay Sarkar
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ElementType.METHOD})
-	public @interface SELEVANCEDATA
-	{
-		String file();
-		String sheet() default "test";
-		String format() default "BASE";
-		// FIRSTYES - If only First column is YES
-	}
-	
-	@DataProvider(name = "STANDARD", parallel = true)
-	public static Object[][] XLDataProvider(Method method) {		
-		SELEVANCEDATA testData = method.getAnnotation(SELEVANCEDATA.class);	
-		String fileName =testData.file().toLowerCase(); 
-		String sheetName = testData.sheet();
-		String format = testData.format();
-		if(fileName.trim().length() == 0 || sheetName.trim().length() == 0){
-			throw new SkipException(method.getName() + " : All Parameters are required");
-		}
-		Matcher matcher;
-	    Pattern pattern;
-	    
-		String regexXLSX ="(.*).xlsx$";		
-	    pattern = Pattern.compile(regexXLSX);
-	    matcher = pattern.matcher(fileName);	       
-		if(matcher.matches()){
-			Object[][] obj = xlsxReader(fileName,sheetName,format);
-			return obj;
-		}
-		
-		String regexXLS ="(.*).xls$";		
-	    pattern = Pattern.compile(regexXLS);
-	    matcher = pattern.matcher(fileName);
-		if(matcher.matches()){
-			Object[][] obj = xlsReader(fileName,sheetName,format);
-			return obj;
-		}
-		
-		String regexXML ="(.*).xml$";		
-	    pattern = Pattern.compile(regexXML);
-	    matcher = pattern.matcher(fileName);
-		if(matcher.matches()){
-			Object[][] obj = xmlReader(fileName,sheetName,format);
-			return obj;
-		}
-		
-		String regexCSV ="(.*).csv$";		
-	    pattern = Pattern.compile(regexCSV);
-	    matcher = pattern.matcher(fileName);
-		if(matcher.matches()){
-			Object[][] obj = csvReader(fileName,sheetName,format);
-			return obj;
-		}
-		
-		String regexJSON ="(.*).json$";		
-	    pattern = Pattern.compile(regexJSON);
-	    matcher = pattern.matcher(fileName);
-		if(matcher.matches()){
-			Object[][] obj = jsonReader(fileName,sheetName,format);
-			return obj;
-		}else{
-			return null;
-		}
-		
-	}
-
+public class BasicFile {
 	public static Object[][] xlsxReader(String filename,String sheetName,String format){
 		try
         {
