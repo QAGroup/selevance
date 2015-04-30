@@ -21,15 +21,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
  * @author Tanmay
  *
  */
-public class Plus {
+public class Plus extends GlobalExtn{
 	private WebDriver driver;
 	private Properties prop = new Properties();
 	private InputStream input = null;
-	final String PROPFILEPATH ="src\\test\\resources\\";
-	final String PROPFILENAME = "config.properties";
-	final String IEDRIVER = "IEDriverServer.exe";
-	final String ffagent = "general.useragent.override";
-	final String ANDROID403 = "Mozilla/5.0 (Linux; U; Android 4.0.3; en-us; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
 	
 	public Plus(String propPath){
 		setBrowser(propPath);

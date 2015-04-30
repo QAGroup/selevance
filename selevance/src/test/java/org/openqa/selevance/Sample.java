@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.openqa.selenium.By;
 import org.openqa.selevance.data.TestData;
 import org.openqa.selevance.data.TestData.SelevanceBasic;
+import org.openqa.selevance.data.TestData.SelevanceDB;
 import org.openqa.selevance.util.Util;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
@@ -93,6 +94,22 @@ public class Sample {
 	@SelevanceBasic(file = "src/test/resources/data/data1.json")
 	public void doTest5(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		baseUrl = "http://google.co.in";		
+		Plus plus = new Plus(globalConfig);
+		plus.driver().get(baseUrl);
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
+		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
+		Util.sleep(5000);
+		plus.driver().quit();
+	}
+	
+	@Test(description = "Sample Test case with MysSql Test data",
+			dataProviderClass= TestData.class,
+			dataProvider = "MYSQL" )
+	@SelevanceDB(table = "testdata")
+	public void doTest6(HashMap<String, String> testdata){	
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		System.out.println(name);
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
 		plus.driver().get(baseUrl);
