@@ -1,5 +1,8 @@
 package org.openqa.selevance.data.reader;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +10,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class DBFile {
 	public static Object[][] mysqlReader(String host,String username,String password,String database,String tablename){
@@ -32,6 +39,50 @@ public class DBFile {
 			 connect.close();
 			 return data;
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public static Object[][] couchReader(String host,String database){
+		try {
+			JSONParser parser = new JSONParser();			
+			URL baseCouch = new URL(host + "/"+database+"/_all_docs");
+			Reader in = new InputStreamReader(baseCouch.openStream());
+			
+			Object obj  = parser.parse(in);
+			JSONArray a = new JSONArray();
+			a.add(obj);
+			
+			for (Object o : a)
+			  {
+				  JSONObject person = (JSONObject) o;
+				 
+				  JSONArray rows = (JSONArray) person.get("rows");
+				  int length = rows.size();
+				  Object[][] data = new Object[length][1];
+				  int i=0;
+				  for (Object row : rows){					  
+					  JSONObject person2 = (JSONObject)row;
+					  String eachDoc = (String) person2.get("id");
+					  URL eachCouch = new URL(host + "/"+database+"/"+eachDoc);
+					  Reader eachReader = new InputStreamReader(eachCouch.openStream());
+					  Object eachObj  = parser.parse(eachReader);
+					  JSONArray eachArray = new JSONArray();
+					  eachArray.add(eachObj);					 
+					  for (Object each : eachArray)
+					  {
+						  JSONObject eachJson = (JSONObject) each;	
+						  System.out.println(eachJson);
+						  data[i][0]=eachJson;
+					  }					  
+					  i++;					  
+				  }
+				 return data;
+			  }			
+			return null;
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

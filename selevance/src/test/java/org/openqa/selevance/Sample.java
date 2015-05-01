@@ -32,13 +32,7 @@ public class Sample {
 	@SelevanceBasic(file = "src/test/resources/data/data1.xml")
 	public void doTest1(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
-		baseUrl = "http://google.co.in";		
-		Plus plus = new Plus(globalConfig);
-		plus.driver().get(baseUrl);
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
-		Util.sleep(5000);
-		plus.driver().quit();
+		commonTest(name);
 	}
 	
 	@Test(description = "Sample Test case with XLS Test data", 
@@ -48,13 +42,7 @@ public class Sample {
 			sheet ="Sheet2" , format ="FIRSTYES")
 	public void doTest2(HashMap<String, String> testdata){		
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
-		baseUrl = "http://google.co.in";		
-		Plus plus = new Plus(globalConfig);
-		plus.driver().get(baseUrl);
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
-		Util.sleep(5000);
-		plus.driver().quit();
+		commonTest(name);
 	}
 	
 	@Test(description = "Sample Test case with XLSX Test data", 
@@ -64,13 +52,7 @@ public class Sample {
 			sheet ="Sheet2" , format ="FIRSTYES")
 	public void doTest3(HashMap<String, String> testdata){		
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
-		baseUrl = "http://google.co.in";		
-		Plus plus = new Plus(globalConfig);
-		plus.driver().get(baseUrl);
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
-		Util.sleep(5000);
-		plus.driver().quit();
+		commonTest(name);
 	}
 	
 	@Test(description = "Sample Test case with CSV Test data", 
@@ -79,13 +61,7 @@ public class Sample {
 	@SelevanceBasic(file = "src/test/resources/data/data1.csv")
 	public void doTest4(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;		
-		baseUrl = "http://google.co.in";		
-		Plus plus = new Plus(globalConfig);
-		plus.driver().get(baseUrl);
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
-		Util.sleep(5000);
-		plus.driver().quit();
+		commonTest(name);
 	}
 	
 	@Test(description = "Sample Test case with JSON Test data",
@@ -94,22 +70,30 @@ public class Sample {
 	@SelevanceBasic(file = "src/test/resources/data/data1.json")
 	public void doTest5(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
-		baseUrl = "http://google.co.in";		
-		Plus plus = new Plus(globalConfig);
-		plus.driver().get(baseUrl);
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
-		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
-		Util.sleep(5000);
-		plus.driver().quit();
+		commonTest(name);
 	}
 	
 	@Test(description = "Sample Test case with MysSql Test data",
 			dataProviderClass= TestData.class,
 			dataProvider = "MYSQL" )
-	@SelevanceDB(table = "testdata")
+	@SelevanceDB(source = "testdata")
 	public void doTest6(HashMap<String, String> testdata){	
 		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		commonTest(name);
+	}
+	
+	@Test(description = "Sample Test case with MysSql Test data",
+			dataProviderClass= TestData.class,
+			dataProvider = "COUCH" )
+	@SelevanceDB(source = "testdb1")
+	public void doTest7(HashMap<String, String> testdata){	
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
 		System.out.println(name);
+		commonTest(name);
+	}
+	
+	
+	public void commonTest(String name){
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
 		plus.driver().get(baseUrl);

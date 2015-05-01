@@ -103,13 +103,17 @@ public class TestData extends GlobalExtn{
 	@Target({ElementType.METHOD})
 	public @interface SelevanceDB
 	{
-		String table();
+		/**
+		 * For MySql source = Table name <br/>
+		 * For CouchDB source = Database name
+		 */
+		String source();
 	}
 	
 	@DataProvider(name = "MYSQL", parallel = true)
 	public static Object[][] mysqlProvider(Method method) {
 		SelevanceDB testData = method.getAnnotation(SelevanceDB.class);	
-		String tableName =testData.table().toLowerCase();
+		String tableName =testData.source().toLowerCase();
 		if(tableName.trim().length() == 0 || tableName.trim().length() == 0){
 			throw new SkipException(method.getName() + " : All Parameters are required");
 		}		
@@ -133,6 +137,34 @@ public class TestData extends GlobalExtn{
 				String pwd = System.getProperty("Password");
 				String db = System.getProperty("Database");
 				return DBFile.mysqlReader(host,user,pwd,db,tableName);			
+			}catch(Exception ex){
+				System.out.println("VM Args not specified");
+				return null;
+			}
+		}
+	}
+	
+	@DataProvider(name = "COUCH", parallel = true)
+	public static Object[][] couchProvider(Method method) {
+		SelevanceDB testData = method.getAnnotation(SelevanceDB.class);	
+		String tableName =testData.source().toLowerCase();
+		if(tableName.trim().length() == 0 || tableName.trim().length() == 0){
+			throw new SkipException(method.getName() + " : All Parameters are required");
+		}		
+		try {
+			InputStream input = new FileInputStream(PROPFILEPATH+PROPFILENAME);
+			
+			Properties prop = new Properties();
+			prop.load(input);
+			String host = prop.getProperty("Host") ;
+			return DBFile.couchReader(host,tableName);
+			
+		} catch (Exception e) {
+			System.out.println("Property File not Declared");
+			try{
+				System.out.println("Loading Data From VM args");
+				String host = System.getProperty("Host") ;
+				return DBFile.couchReader(host,tableName);		
 			}catch(Exception ex){
 				System.out.println("VM Args not specified");
 				return null;
