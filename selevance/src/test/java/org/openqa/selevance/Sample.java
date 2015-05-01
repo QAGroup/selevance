@@ -82,7 +82,7 @@ public class Sample {
 		commonTest(name);
 	}
 	
-	@Test(description = "Sample Test case with MysSql Test data",
+	@Test(description = "Sample Test case with CouchDB Test data",
 			dataProviderClass= TestData.class,
 			dataProvider = "COUCH" )
 	@SelevanceDB(source = "testdb1")
