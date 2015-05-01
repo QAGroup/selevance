@@ -10,6 +10,7 @@ import java.util.Properties;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -100,6 +101,11 @@ public class Plus extends GlobalExtn{
 			return driver;
 		}else if(browserName.toUpperCase().contains(Browser.List.OPERA.name())){
 			driver = new OperaDriver();
+			driver.manage().window().maximize();
+			return driver;
+		}else if(browserName.toUpperCase().contains(Browser.List.CHROME.name())){
+			System.setProperty("webdriver.chrome.driver", PROPFILEPATH+ChromeDRIVER);
+			WebDriver driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			return driver;
 		}else{
