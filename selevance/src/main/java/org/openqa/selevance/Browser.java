@@ -5,5 +5,5 @@ package org.openqa.selevance;
  *
  */
 public class Browser {
-	public enum List{FIREFOX,CHROME,INTERNETEXPLORER,ANDROIDFF}
+	public enum List{FIREFOX,CHROME,INTERNETEXPLORER,SAFARI,OPERA,ANDROIDFF}
 }

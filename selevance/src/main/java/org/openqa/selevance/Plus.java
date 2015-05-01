@@ -14,8 +14,10 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 /**
  * @author Tanmay
@@ -91,6 +93,14 @@ public class Plus extends GlobalExtn{
 			driver = new FirefoxDriver(ffp);
 			driver.manage().window().setPosition(new Point(0,0));
 			driver.manage().window().setSize(new Dimension(400,768));
+			return driver;
+		}else if(browserName.toUpperCase().contains(Browser.List.SAFARI.name())){
+			driver = new SafariDriver();
+			driver.manage().window().maximize();
+			return driver;
+		}else if(browserName.toUpperCase().contains(Browser.List.OPERA.name())){
+			driver = new OperaDriver();
+			driver.manage().window().maximize();
 			return driver;
 		}else{
 			return null;
