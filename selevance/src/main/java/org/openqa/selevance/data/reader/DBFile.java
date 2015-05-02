@@ -57,15 +57,15 @@ public class DBFile {
 			
 			for (Object o : a)
 			  {
-				  JSONObject person = (JSONObject) o;
+				  JSONObject jobj = (JSONObject) o;
 				 
-				  JSONArray rows = (JSONArray) person.get("rows");
+				  JSONArray rows = (JSONArray) jobj.get("rows");
 				  int length = rows.size();
 				  Object[][] data = new Object[length][1];
 				  int i=0;
 				  for (Object row : rows){					  
-					  JSONObject person2 = (JSONObject)row;
-					  String eachDoc = (String) person2.get("id");
+					  JSONObject jobjInside = (JSONObject)row;
+					  String eachDoc = (String) jobjInside.get("id");
 					  URL eachCouch = new URL(host + "/"+database+"/"+eachDoc);
 					  Reader eachReader = new InputStreamReader(eachCouch.openStream());
 					  Object eachObj  = parser.parse(eachReader);
