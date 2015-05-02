@@ -172,4 +172,33 @@ public class TestData extends GlobalExtn{
 		}
 	}
 	
+	@DataProvider(name = "GOOGLE", parallel = true)
+	public static Object[][] googleProvider(Method method) {
+		SelevanceDB testData = method.getAnnotation(SelevanceDB.class);	
+		String spreadsheet =testData.source();
+		if(spreadsheet.trim().length() == 0 || spreadsheet.trim().length() == 0){
+			throw new SkipException(method.getName() + " : All Parameters are required");
+		}		
+		try {
+			InputStream input = new FileInputStream(PROPFILEPATH+PROPFILENAME);
+			Properties prop = new Properties();
+			prop.load(input);
+			String gid = prop.getProperty("GID") ;
+			String gpd = prop.getProperty("GPW") ;
+			return DBFile.gSpreadSheetReader(gid,gpd,spreadsheet);
+			
+		} catch (Exception e) {
+			System.out.println("Property File not Declared");
+			try{
+				System.out.println("Loading Data From VM args");
+				String gid = System.getProperty("GID") ;
+				String gpd = System.getProperty("GPW") ;
+				return DBFile.gSpreadSheetReader(gid,gpd,spreadsheet);	
+			}catch(Exception ex){
+				System.out.println("VM Args not specified");
+				return null;
+			}
+		}
+	}
+	
 }

@@ -8,12 +8,21 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.data.spreadsheet.ListEntry;
+import com.google.gdata.data.spreadsheet.ListFeed;
+import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
+import com.google.gdata.data.spreadsheet.WorksheetEntry;
+import com.google.gdata.util.AuthenticationException;
+import com.google.gdata.util.ServiceException;
 
 public class DBFile {
 	public static Object[][] mysqlReader(String host,String username,String password,String database,String tablename){
@@ -88,4 +97,44 @@ public class DBFile {
 			return null;
 		}
 	}
+	public static Object[][] gSpreadSheetReader(
+			final String GOOGLE_ACCOUNT_USERNAME,
+			final String GOOGLE_ACCOUNT_PASSWORD,
+			final String SPREADSHEET_URL){
+		try{
+			SpreadsheetService service = new SpreadsheetService("Print Google Spreadsheet For Selevance");
+		    service.setUserCredentials(GOOGLE_ACCOUNT_USERNAME, GOOGLE_ACCOUNT_PASSWORD);		 
+		    // Load sheet
+		    String url ="https://spreadsheets.google.com/feeds/spreadsheets/"+SPREADSHEET_URL;
+		    URL metafeedUrl = new URL(url);
+		    SpreadsheetEntry spreadsheet = service.getEntry(metafeedUrl, SpreadsheetEntry.class);
+		    URL listFeedUrl = ((WorksheetEntry) spreadsheet.getWorksheets().get(0)).getListFeedUrl();		 
+		    ListFeed feedInit = (ListFeed) service.getFeed(listFeedUrl, ListFeed.class);
+		    // Count entries
+		    int rowCount =0;
+		    for(@SuppressWarnings("unused") ListEntry entry : feedInit.getEntries())
+		    {		      
+		      rowCount++;
+		    }
+		    Object[][] data = new Object[rowCount][1];
+		    // Print entries
+		    ListFeed feed = (ListFeed) service.getFeed(listFeedUrl, ListFeed.class);
+		    
+		    int i=0;
+		    for(ListEntry entry : feed.getEntries())
+		    {
+		    	HashMap<String, String> hm = new HashMap<String, String>();
+		    	for(String tag : entry.getCustomElements().getTags())
+			    {
+			        hm.put(tag, entry.getCustomElements().getValue(tag));
+			    }
+		    	data[i][0] =hm;
+		    	i++;
+		    }
+		    return data;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}		
 }

@@ -91,6 +91,15 @@ public class Sample {
 		System.out.println(name);
 		commonTest(name);
 	}
+		
+	@Test(description = "Sample Test case with Google Spreadsheet Test data",
+			dataProviderClass= TestData.class,
+			dataProvider = "GOOGLE" )
+	@SelevanceDB(source = "1pozGdNeEYBm9kJ44JKYAcwOCmLoxshMcHErZoOJc81A")
+	public void doTest8(HashMap<String, String> testdata){	
+		String name = testdata.get("fname") + " " +testdata.get("lname") ;
+		commonTest(name);
+	}
 	
 	
 	public void commonTest(String name){
