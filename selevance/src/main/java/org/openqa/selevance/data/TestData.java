@@ -201,4 +201,34 @@ public class TestData extends GlobalExtn{
 		}
 	}
 	
+	@DataProvider(name = "MONGO", parallel = true)
+	public static Object[][] mongoProvider(Method method) {
+		SelevanceDB testData = method.getAnnotation(SelevanceDB.class);	
+		String tableName =testData.source().toLowerCase();
+		if(tableName.trim().length() == 0 || tableName.trim().length() == 0){
+			throw new SkipException(method.getName() + " : All Parameters are required");
+		}		
+		try {
+			InputStream input = new FileInputStream(PROPFILEPATH+PROPFILENAME);
+			
+			Properties prop = new Properties();
+			prop.load(input);
+			String host = prop.getProperty("Host") ;
+			String db = prop.getProperty("DataBase") ;
+			return DBFile.mongoReader(host,db,tableName);
+			
+		} catch (Exception e) {
+			System.out.println("Property File not Declared");
+			try{
+				System.out.println("Loading Data From VM args");
+				String host = System.getProperty("Host") ;
+				String db = System.getProperty("DataBase") ;
+				return DBFile.mongoReader(host,db,tableName);		
+			}catch(Exception ex){
+				System.out.println("VM Args not specified");
+				return null;
+			}
+		}
+	}
+	
 }

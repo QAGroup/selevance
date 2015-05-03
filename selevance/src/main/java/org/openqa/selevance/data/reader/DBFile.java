@@ -23,6 +23,10 @@ import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
 
 public class DBFile {
 	public static Object[][] mysqlReader(String host,String username,String password,String database,String tablename){
@@ -136,5 +140,43 @@ public class DBFile {
 			ex.printStackTrace();
 			return null;
 		}
-	}		
+	}	
+	public static Object[][] mongoReader(String host,String database,String collection){
+		try {
+			String hostDetails[] = host.split(":");
+			@SuppressWarnings("resource")
+			MongoClient mongoClient = new MongoClient(hostDetails[0] , Integer.parseInt(hostDetails[1]) );
+			@SuppressWarnings("deprecation")
+			DB db = mongoClient.getDB(database);
+			DBCollection coll = db.getCollection(collection);
+			DBCursor cursor = coll.find();
+			int rowCount = cursor.count();
+			int i=0;
+			Object[][] data = new Object[rowCount][1];
+			try {
+			   while(cursor.hasNext()) {
+				   String row = cursor.next().toString().trim();
+				   int lastPos = row.length();
+				   row = row.substring(1, lastPos-1);				   
+				   String eachSet[] = row.split(",");
+				   HashMap<String, String> hm = new HashMap<String, String>();
+				   for(String each : eachSet){
+					   String keyPair[] = each.split(":");
+					   String key = keyPair[0].replace("\"", "").trim();
+					   String value_ = keyPair[1].replace("\"", "").trim();
+					   String value = value_ + (key.contains("_id") ? keyPair[2] : "");
+					   hm.put(key, value);
+				   }
+				   data[i][0] =hm;
+				   i++;
+			   }
+			} finally {
+			   cursor.close();
+			}
+			return data;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }

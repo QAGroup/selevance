@@ -101,6 +101,15 @@ public class Sample {
 		commonTest(name);
 	}
 	
+	@Test(description = "Sample Test case with Mongo DB Test data",
+			dataProviderClass= TestData.class,
+			dataProvider = "MONGO" )
+	@SelevanceDB(source = "testcollection")
+	public void doTest9(HashMap<String, String> testdata){	
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		commonTest(name);
+	}
+	
 	
 	public void commonTest(String name){
 		baseUrl = "http://google.co.in";		
