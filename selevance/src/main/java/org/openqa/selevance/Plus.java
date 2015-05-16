@@ -28,6 +28,7 @@ public class Plus extends GlobalExtn{
 	private WebDriver driver;
 	private Properties prop = new Properties();
 	private InputStream input = null;
+	String browserName ="";
 	
 	public Plus(String propPath){
 		setBrowser(propPath);
@@ -45,7 +46,7 @@ public class Plus extends GlobalExtn{
 				input = new FileInputStream(PROPFILEPATH+PROPFILENAME);
 			}
 			prop.load(input);
-			String browserName = prop.getProperty("browser") ;
+			browserName = prop.getProperty("browser") ;
 			String browserPath = prop.getProperty("browserPath") ;
 			String grid = prop.getProperty("grid") ;
 			if(browserPath!= null){
@@ -61,7 +62,7 @@ public class Plus extends GlobalExtn{
 			System.out.println("Property File not Declared");
 			try{
 				System.out.println("Loading Data From VM args");
-				String browserName = System.getProperty("browser") ; 
+				browserName = System.getProperty("browser") ; 
 				String browserPath = System.getProperty("browserPath") ;
 				String grid = System.getProperty("grid") ;
 				if(browserPath!= null){
@@ -77,6 +78,9 @@ public class Plus extends GlobalExtn{
 			}
 			
 		}
+	}
+	public String getBrowser(){
+		return browserName;
 	}
 	private WebDriver theBrowser(String browserName){		
 		if(browserName.toUpperCase().contains(Browser.List.FIREFOX.name())){

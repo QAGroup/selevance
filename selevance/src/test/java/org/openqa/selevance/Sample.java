@@ -114,6 +114,7 @@ public class Sample {
 	public void commonTest(String name){
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
+		System.out.println("Browser Name : " + plus.getBrowser());
 		plus.driver().get(baseUrl);
 		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).clear();
 		plus.driver().findElement(By.xpath(".//*[@id='lst-ib']")).sendKeys(name);
