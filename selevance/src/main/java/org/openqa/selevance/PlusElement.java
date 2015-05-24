@@ -72,6 +72,9 @@ public class PlusElement {
 	public String toolTip(WebElement element){
 		return element.getAttribute("title");
 	}
+	public String maxLength(WebElement element){
+		return element.getAttribute("maxlength");
+	}
 	public boolean isReadOnly(WebElement element){
 		String prop = element.getAttribute("readonly");
 		if(prop!=null && 
