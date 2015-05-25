@@ -2,6 +2,7 @@ package org.openqa.selevance;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +30,7 @@ public class Plus extends GlobalExtn{
 	private Properties prop = new Properties();
 	private InputStream input = null;
 	String browserName ="";
+	String ffPlugIn = null;
 	
 	public Plus(String propPath){
 		setBrowser(propPath);
@@ -47,6 +49,7 @@ public class Plus extends GlobalExtn{
 			}
 			prop.load(input);
 			browserName = prop.getProperty("browser") ;
+			ffPlugIn = prop.getProperty("ffplugin") ;
 			String browserPath = prop.getProperty("browserPath") ;
 			String grid = prop.getProperty("grid") ;
 			if(browserPath!= null){
@@ -63,6 +66,7 @@ public class Plus extends GlobalExtn{
 			try{
 				System.out.println("Loading Data From VM args");
 				browserName = System.getProperty("browser") ; 
+				ffPlugIn = System.getProperty("ffplugin") ;
 				String browserPath = System.getProperty("browserPath") ;
 				String grid = System.getProperty("grid") ;
 				if(browserPath!= null){
@@ -83,8 +87,21 @@ public class Plus extends GlobalExtn{
 		return browserName;
 	}
 	private WebDriver theBrowser(String browserName){		
-		if(browserName.toUpperCase().contains(Browser.List.FIREFOX.name())){
-			driver = new FirefoxDriver();
+		if(browserName.toUpperCase().contains(Browser.List.FIREFOX.name())){			
+			if(ffPlugIn!=null){
+				FirefoxProfile profile = new FirefoxProfile(); 
+				String plugins[] = ffPlugIn.split(",");
+				for(String plugin : plugins){
+					try {
+						profile.addExtension(new File(ADDONPATH+plugin));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				driver = new FirefoxDriver(profile);				
+			}else{
+				driver = new FirefoxDriver();
+			}			
 			driver.manage().window().maximize();
 			return driver;
 		}else if(browserName.toUpperCase().contains(Browser.List.INTERNETEXPLORER.name())){
@@ -120,7 +137,17 @@ public class Plus extends GlobalExtn{
 	private WebDriver theStackBrowser(String browserName,String path){		
 		if(browserName.toUpperCase().contains(Browser.List.FIREFOX.name())){
 			FirefoxBinary fb = new FirefoxBinary(new File(path));
-			FirefoxProfile ffp = new FirefoxProfile();
+			FirefoxProfile ffp = new FirefoxProfile();			
+			if(ffPlugIn!=null){
+				String plugins[] = ffPlugIn.split(",");
+				for(String plugin : plugins){
+					try {
+						ffp.addExtension(new File(ADDONPATH+plugin));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}				
+			}			
 			driver = new FirefoxDriver(fb,ffp);
 			driver.manage().window().maximize();
 			return driver;
