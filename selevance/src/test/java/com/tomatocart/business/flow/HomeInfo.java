@@ -57,6 +57,20 @@ public class HomeInfo extends HomePage{
 			//return null;
 		}
 	}
+	
+	public void searchProduct() {
+		try{
+			getSearchTxt().clear();
+			getSearchTxt().sendKeys("Apple");
+			getSearchBtn().click();
+			log.info("After searching apple clicked button");
+		}catch(Exception ex){
+			ex.printStackTrace();
+			//BaseDriver.quit();
+			log.error(ex.getMessage());
+			//return null;
+		}
+	}
 /*
 	public Common<Home> doCommon() {
 		// TODO Auto-generated method stub
