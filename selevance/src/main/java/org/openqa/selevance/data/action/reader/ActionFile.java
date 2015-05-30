@@ -53,7 +53,7 @@ public class ActionFile {
             if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
             	colEx1++;
             }
-            Object[][] data = new Object[colEx1-1][2];   
+            Object[][] data = new Object[colEx1-1][3];   
             
             int colEx = 0;
             int colExYes = 0;
@@ -64,6 +64,7 @@ public class ActionFile {
                 Iterator<Cell> cellIterator = row.cellIterator();
                	HashMap<String, String> hm = new HashMap<String, String>();
                	ArrayList<ArrayList<String>> allAction = new ArrayList<ArrayList<String>>();
+               	HashMap<String, String> tdata = new HashMap<String, String>();
                	int i =0;
                	if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){
                		boolean isDataRow = false;
@@ -173,12 +174,49 @@ public class ActionFile {
                             	rowPos++;
                             }
                        		//-------- END STEPS based on TCID --------
+                            //---------------- READ Test Data START-------------------
+                            //System.out.println("--------TEST DATA -----------");
+                            XSSFSheet testDataheet = workbook.getSheet(testdata);
+                            Iterator<Row> testDataRowIterator = testDataheet.iterator();
+                            ArrayList<String> tDataTitle = new ArrayList<String>();
+                            
+                           	int col =0;
+                            while(testDataRowIterator.hasNext()){
+                            	Row testDataRow = testDataRowIterator.next();
+                            	Iterator<Cell> testDataCellIterator = testDataRow.cellIterator();
+                            	int m =0;
+                            	boolean correctTC = false;
+                            	while (testDataCellIterator.hasNext())
+                                {
+                            		Cell testDataCell = testDataCellIterator.next();
+                            		if(col==0){
+                            			tDataTitle.add(testDataCell.toString());
+                            		}
+                            		if(m==0 && col !=0 && testDataCell.toString().toLowerCase().contains(tcID.toLowerCase())){
+                            			correctTC = true;
+                            		}
+                            		if(correctTC){
+                            			tdata.put(tDataTitle.get(m), testDataCell.toString());
+                            		}
+                            		/*if(col==0){
+                            			tDataTitle.add(testDataCell.toString());
+                            		}else{
+                            			tdata.put(tDataTitle.get(m), testDataCell.toString());
+                            		}*/
+                            		m++;
+                                }
+                            	col++;
+                            }
+                            
+                            //---------------- READ Test Data END-------------------                            
                        	}
                        	i++; 
                    }
                    if(colEx!=0){
                    		data[colEx-1][0] =hm;
                    		data[colEx-1][1] =allAction;
+                   		data[colEx-1][2] =tdata;
+                   		//System.out.println(tdata);
                    }               
                    colEx ++; 
                	}

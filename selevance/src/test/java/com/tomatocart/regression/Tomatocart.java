@@ -62,10 +62,12 @@ public class Tomatocart {
 	testcase ="TestCase",steps="Steps",index="Class",data="Data")
 	public void tomatoCartBase(
 			HashMap<String, String> testcase,
-			ArrayList<ArrayList<String>> actions) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException{	
+			ArrayList<ArrayList<String>> actions,
+			HashMap<String, String> testdata) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException{	
 		
 		System.out.println("ID : "+testcase.get("TestCaseID"));
 		System.out.println("Description : "+testcase.get("Description"));
+		System.out.println(testdata);
 		
 		Class<?> noparams[] = {};		
 		
