@@ -8,10 +8,7 @@ import java.util.HashMap;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selevance.Plus;
 import org.openqa.selevance.data.ActionData;
-import org.openqa.selevance.data.TestData;
 import org.openqa.selevance.data.ActionData.SelevanceAction;
-import org.openqa.selevance.data.TestData.SelevanceBasic;
-import org.openqa.selevance.util.Util;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -34,27 +31,7 @@ public class Tomatocart {
 	}		
 	
 		
-	@Test(description = "Sample Test case with XLS Test data", 
-			dataProviderClass= TestData.class,
-			dataProvider = "STANDARD" )
-	@SelevanceBasic(file = "src/test/resources/data/tomatocart.xlsx", 
-			sheet ="Sheet1" , format ="FIRSTYES")
-	public void validateFirstProduct(HashMap<String, String> testdata){
-		baseUrl = "http://localhost/tomatocart/";
-		Plus plus = new Plus(globalConfig);
-		//System.out.println(globalConfig);		
-		HomeInfo homeObj = PageFactory.initElements(plus.driver(), HomeInfo.class);
-		CommonInfo commonObj = PageFactory.initElements(plus.driver(), CommonInfo.class);		
-		plus.driver().get(baseUrl);	
-		homeObj.searchProduct(testdata.get("Device"));
-		commonObj.verifyShopByPrice();
-		homeObj.searchProduct(testdata.get("Device"));
-		homeObj.verifyFirstProduct();
-		Util.sleep(2000);
-		commonObj.verifyShopByPriceAppearance();
-		plus.quit();
-	}
-	
+	@SuppressWarnings({ "rawtypes"})
 	@Test(description = "Sample Test case with XLSX Test data", 
 			dataProviderClass= ActionData.class,
 			dataProvider = "STANDARD" )
@@ -69,7 +46,8 @@ public class Tomatocart {
 		System.out.println("Description : "+testcase.get("Description"));
 		System.out.println(testdata);
 		
-		Class<?> noparams[] = {};		
+		Class[] hashParam = new Class[1];	
+		hashParam[0] = HashMap.class;
 		
 		baseUrl = "http://localhost/tomatocart/";
 		Plus plus = new Plus(globalConfig);
@@ -89,12 +67,12 @@ public class Tomatocart {
 			
 			switch(page.toLowerCase()){
 			case "common" :
-				Method commonMethod = CommonInfo.class.getDeclaredMethod(methodName, noparams);
-				commonMethod.invoke(commonObj);
+				Method commonMethod = CommonInfo.class.getDeclaredMethod(methodName, hashParam);
+				commonMethod.invoke(commonObj,testdata);
 				break;
 			case "home" :
-				Method homeMethod = HomeInfo.class.getDeclaredMethod(methodName, noparams);
-				homeMethod.invoke(homeObj);
+				Method homeMethod = HomeInfo.class.getDeclaredMethod(methodName, hashParam);
+				homeMethod.invoke(homeObj,testdata);
 				break;
 			}
 		}

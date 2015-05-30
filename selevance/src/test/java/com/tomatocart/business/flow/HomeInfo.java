@@ -1,5 +1,7 @@
 package com.tomatocart.business.flow;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selevance.util.Util;
@@ -35,7 +37,7 @@ public class HomeInfo extends HomePage{
 			return null;
 		}		
 	}*/
-	public void verifyFirstProduct() {
+	public void verifyFirstProduct(HashMap<String, String> data) {
 		Util.sleep(3000);
 		getProductImage().get(0).click();	
 	}/*
@@ -44,8 +46,9 @@ public class HomeInfo extends HomePage{
 		return new HomeInfo();
 	}*/
 
-	public void searchProduct(String prod) {
+	public void searchProduct(HashMap<String, String> data) {
 		try{
+			String prod = data.get("Device");
 			getSearchTxt().clear();
 			getSearchTxt().sendKeys(prod);
 			getSearchBtn().click();
@@ -57,30 +60,18 @@ public class HomeInfo extends HomePage{
 			//return null;
 		}
 	}
-	
-	public void searchProduct() {
-		try{
-			getSearchTxt().clear();
-			getSearchTxt().sendKeys("Apple");
-			getSearchBtn().click();
-			log.info("After searching apple clicked button");
-		}catch(Exception ex){
-			ex.printStackTrace();
-			//BaseDriver.quit();
-			log.error(ex.getMessage());
-			//return null;
-		}
-	}
+		
 /*
 	public Common<Home> doCommon() {
 		// TODO Auto-generated method stub
 		return new CommonInfo<Home>(this);
 	}
 */
-	public void validateAutoComplete() {
+	public void validateAutoComplete(HashMap<String, String> data) {
 		try{
+			String prod = data.get("Device");
 			getSearchTxt().clear();
-			getSearchTxt().sendKeys("apple");
+			getSearchTxt().sendKeys(prod);
 			getSearchTxt().sendKeys(" ");
 			waitForElementToDisplay(driver,lbl_Autocompleter_Locator,30);
 			getAutoCompleteMore().click();

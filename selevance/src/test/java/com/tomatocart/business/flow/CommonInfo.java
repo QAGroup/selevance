@@ -1,10 +1,12 @@
 package com.tomatocart.business.flow;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import com.tomatocart.page.CommonPage;
 
 public class CommonInfo extends CommonPage {
@@ -15,11 +17,11 @@ public class CommonInfo extends CommonPage {
 	}
 
 	
-	public void verifyCatragory() {
+	public void verifyCatragory(HashMap<String, String> data) {
 		// TODO Auto-generated method stub		
 	}
 
-	public void verifyManufacturers() {
+	public void verifyManufacturers(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -28,7 +30,7 @@ public class CommonInfo extends CommonPage {
 		
 	}
 
-	public void verifyShopByPrice() {
+	public void verifyShopByPrice(HashMap<String, String> data) {
 		Logger log = Logger.getLogger("verifyShopByPrice");
 		List<WebElement> allPrice = getPriceList();
 		String priceValue ="";		
@@ -80,37 +82,37 @@ public class CommonInfo extends CommonPage {
 		}		
 	}
 
-	public void verifyArticleCatagory() {
+	public void verifyArticleCatagory(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 	
 	}
 
-	public void verifyNewProduct() {
+	public void verifyNewProduct(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyManufacturerInfo() {
+	public void verifyManufacturerInfo(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyProdNotification() {
+	public void verifyProdNotification(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyTellAFriend() {
+	public void verifyTellAFriend(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyCurrency() {
+	public void verifyCurrency(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void verifyPopularSearch() {
+	public void verifyPopularSearch(HashMap<String, String> data) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -136,7 +138,7 @@ public class CommonInfo extends CommonPage {
 	}
 
 	
-	public void verifyShopByPriceAppearance() {
+	public void verifyShopByPriceAppearance(HashMap<String, String> data) {
 		List<WebElement> allPrice = getPriceList();
 		String priceValue ="";		
 		for(WebElement ele : allPrice){	
