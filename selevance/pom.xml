@@ -51,33 +51,16 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-				<configuration>
-					<outputDirectory>${project.build.directory}/javadoc</outputDirectory>
-					<reportOutputDirectory>${project.reporting.outputDirectory}/javadoc</reportOutputDirectory>
-				</configuration>
+				<version>${maven-javadoc-plugin.version}</version>				
 				<executions>
 					<execution>
-						<id>attach-javadocs</id>
-						<phase>site</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>  <!-- Create sources.jar -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
+						<id>attach-javadocs</id>						
 						<goals>
 							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 
