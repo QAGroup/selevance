@@ -17,13 +17,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 /**
- * @author Tanmay
- *
+ * Selevance WebDriver 
+ * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
  */
 public class Plus extends GlobalExtn{
 	private WebDriver driver;
@@ -42,6 +43,12 @@ public class Plus extends GlobalExtn{
 	
 	private void setBrowser(String propPath){
 		try{
+			// --- 
+			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog"); 
+			System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "OFF"); 
+			System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "OFF");
+			//-------
+			
 			if(propPath!=null){
 				input = new FileInputStream(PROPFILEPATH+propPath);
 			}else{
@@ -106,7 +113,14 @@ public class Plus extends GlobalExtn{
 			return driver;
 		}else if(browserName.toUpperCase().contains(Browser.List.INTERNETEXPLORER.name())){
 			System.setProperty("webdriver.ie.driver", PROPFILEPATH+IEDRIVER);
-			driver = new InternetExplorerDriver();
+			
+			DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+	        capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
+	        capabilities.setCapability("ignoreZoomSetting", true);
+	        // For Slow Internet connection some time network error modal appears. To avoid that use below capabilities
+	        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT);
+			
+			driver = new InternetExplorerDriver(capabilities);
 			driver.manage().window().maximize();
 			return driver;
 		}else if(browserName.toUpperCase().contains(Browser.List.ANDROIDFF.name())){
@@ -216,3 +230,4 @@ public class Plus extends GlobalExtn{
 		this.driver.quit();		
 	}
 }
+

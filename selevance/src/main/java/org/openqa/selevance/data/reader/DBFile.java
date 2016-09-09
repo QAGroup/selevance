@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,13 +20,13 @@ import com.google.gdata.data.spreadsheet.ListEntry;
 import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
-import com.google.gdata.util.AuthenticationException;
-import com.google.gdata.util.ServiceException;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
-
+/**
+ * @author @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ */
 public class DBFile {
 	public static Object[][] mysqlReader(String host,String username,String password,String database,String tablename){
 		try {

@@ -25,7 +25,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+/**
+ * @author @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ */
 public class BasicFile {
 	public static Object[][] xlsxReader(String filename,String sheetName,String format){
 		try
@@ -49,17 +51,29 @@ public class BasicFile {
                     	if(i==0 && cell.toString().trim().equalsIgnoreCase("YES")){
                    			isDataRow = true;
                    			break;
+                   		}else{
+                   			isDataRow = false;
+                   			break;
                    		}
                     }
                 	if(isDataRow){
                 		colEx1++;
                 	} 
                 }else{
+                	boolean isDataRow = false;
                 	while (cellIterator.hasNext())
                     {
-                    	cellIterator.next();   
+                    	//cellIterator.next();   
+                		Cell cell =cellIterator.next(); 
+                		if(cell.toString().trim().length()>0){
+                			isDataRow = true;
+                   			break;
+                		}
                     }
-                	colEx1++;
+                	if(isDataRow){
+                		colEx1++;
+                	}
+
                 }                
             } 
             if(format.trim().replace(" ", "").equalsIgnoreCase("FIRSTYES")){

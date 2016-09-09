@@ -22,7 +22,7 @@ import org.testng.annotations.DataProvider;
 
 /**
  * Read XLSX/XLS/XML/CSV/JSON File for Test data
- * @author Tanmay Sarkar
+ * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
  * @since 6th March 2015
  */
 public class TestData extends GlobalExtn{
@@ -31,7 +31,7 @@ public class TestData extends GlobalExtn{
 	 * @param String file : Test Data file name (*.xls / *.xlsx / *.csv / *.json) <br/>
 	 * @param String sheet : For excel sheet name , use node name for XML	<br/>
 	 * 
-	 * @author Tanmay Sarkar
+	 * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.METHOD})
@@ -228,6 +228,19 @@ public class TestData extends GlobalExtn{
 				System.out.println("VM Args not specified");
 				return null;
 			}
+		}
+	}
+	
+	@DataProvider(name = "SETPRIORITY", parallel = true)
+	public static Object[][] basicNmoreProvider(Method method) {
+		String p = System.getProperty("SETPRIORITY") ;
+		if(p==null || p.toUpperCase().contains("STANDARD")){
+			return BaseDataProvider( method);
+		}else if (p.toUpperCase().contains("COUCH")){
+			return couchProvider(method);
+		}else{
+			System.out.println(p);
+			return null;
 		}
 	}
 	

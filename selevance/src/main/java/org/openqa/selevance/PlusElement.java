@@ -5,16 +5,19 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selevance.util.Util;
 
 /**
- * @author Tanmay
- *
+ * WebElement Helper
+ * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
  */
 public class PlusElement {
 
@@ -23,10 +26,25 @@ public class PlusElement {
 	    wait.until(ExpectedConditions.elementToBeClickable(element));
 	    return element;
 	}
+	
+	/**
+	 * Only used for Lists of Web elements. Supports only for Legacy use
+	 */
+	@Deprecated
 	public WebElement waitForElement(WebDriver driver,WebElement element){
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 	    wait.until(ExpectedConditions.elementToBeClickable(element));
 	    return element;
+	}
+	public boolean waitForElement(WebDriver driver,By locator){
+		try{
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+		    wait.until(ExpectedConditions.elementToBeClickable(locator));
+
+		    return true;
+		}catch(Exception ex){
+			return false;
+		}
 	}
 	
 	public WebElement waitForElementToDisplay(WebDriver driver,By locator,int time){
@@ -36,6 +54,11 @@ public class PlusElement {
 	}
 	public WebElement waitForElementToDisplay(WebDriver driver,WebElement element){
 		WebDriverWait wait = new WebDriverWait(driver, 10);
+	    wait.until(ExpectedConditions.visibilityOf(element));
+	    return element;
+	}
+	public WebElement waitForElementToDisplay(WebDriver driver,WebElement element,int time){
+		WebDriverWait wait = new WebDriverWait(driver, time);
 	    wait.until(ExpectedConditions.visibilityOf(element));
 	    return element;
 	}
@@ -98,4 +121,65 @@ public class PlusElement {
 	public String getElmValue(WebElement element){
 		return element.getAttribute("value");		
 	}
+	
+	public void recoveryFromConnectionLoss(WebDriver driver){
+		int i;
+		for(i=0;i<GlobalExtn.MAX_TRY;i++){
+			String title = driver.getTitle();
+			if(title.contains("404") || title.contains("This page can")){				
+				driver.navigate().refresh();
+			}else{break;}
+		}
+		if(i>0){
+			//log.debug(i+" times try to recover.");
+		}
+	}
+	
+	public boolean waitForPageLoad(WebDriver driver){
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		int i;
+		for (i=0; i<GlobalExtn.MAX_TIME_OUT; i++){ 
+			Util.sleep(1000); 
+			try{
+				if (js.executeScript("return document.readyState").toString().equals("complete")){ 
+					//System.out.println("Current ittararion : "+ i);
+					return true;				
+				}else{
+					//System.out.println("Check : "+js.executeScript("return document.readyState").toString());
+				}   
+			}catch(Exception ex){
+				System.out.println("Javascript Error : " + ex.getMessage());
+			}
+		}return false;
+	}
+	public boolean waitForPageLoad(WebDriver driver,int time){
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		int i;
+		for (i=0; i<time; i++){ 
+			Util.sleep(1000); 
+			try{
+				if (js.executeScript("return document.readyState").toString().equals("complete")){ 
+					return true;				
+				}else{
+					//System.out.println("Check : "+js.executeScript("return document.readyState").toString());
+				}   
+			}catch(Exception ex){
+				System.out.println("Javascript Error : " + ex.getMessage());
+			}
+		}return false;
+	}
+	public void ieClick(WebDriver driver,WebElement w ){
+		try{
+			w.click();
+			w.sendKeys(Keys.ENTER);
+			JavascriptExecutor executor2 = (JavascriptExecutor) driver;
+	        executor2.executeScript("arguments[0].click();", w);	        		
+		}catch(org.openqa.selenium.StaleElementReferenceException ex){
+			//System.out.println("Info ieClick 001 : Page is navigating");
+		}catch(Exception e){
+			System.out.println("Error ieClick 001");
+			e.printStackTrace();
+		}
+	}	
+	
 }
