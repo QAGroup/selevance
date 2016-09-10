@@ -156,7 +156,7 @@ public class TestData extends GlobalExtn{
 			
 			Properties prop = new Properties();
 			prop.load(input);
-			String host = prop.getProperty("Host") ;
+			String host = prop.getProperty("CHost") ;
 			return DBFile.couchReader(host,tableName);
 			
 		} catch (Exception e) {
@@ -213,8 +213,8 @@ public class TestData extends GlobalExtn{
 			
 			Properties prop = new Properties();
 			prop.load(input);
-			String host = prop.getProperty("Host") ;
-			String db = prop.getProperty("DataBase") ;
+			String host = prop.getProperty("MHost") ;
+			String db = prop.getProperty("MDataBase") ;
 			return DBFile.mongoReader(host,db,tableName);
 			
 		} catch (Exception e) {
@@ -238,6 +238,12 @@ public class TestData extends GlobalExtn{
 			return BaseDataProvider( method);
 		}else if (p.toUpperCase().contains("COUCH")){
 			return couchProvider(method);
+		}else if (p.toUpperCase().contains("MONGO")){
+			return mongoProvider(method);
+		}else if (p.toUpperCase().contains("MYSQL")){
+			return mysqlProvider(method);
+		}else if (p.toUpperCase().contains("GOOGLE")){
+			return googleProvider(method);
 		}else{
 			System.out.println(p);
 			return null;
