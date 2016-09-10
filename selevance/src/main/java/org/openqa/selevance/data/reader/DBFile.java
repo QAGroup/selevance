@@ -25,7 +25,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 /**
- * @author @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ * @author Tanmay Sarkar
  */
 public class DBFile {
 	public static Object[][] mysqlReader(String host,String username,String password,String database,String tablename){

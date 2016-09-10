@@ -23,7 +23,7 @@ import java.util.Set;
  * The order is always <B>actualValue</B>, <B>expectedValue</B> [, message].
  *
  * @author <a href='mailto:the_mindstorm@evolva.ro'>Alexandru Popescu</a> * 
- * @author Override By : <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ * @author Tanmay Sarkar
  */
 public class Assert {
 

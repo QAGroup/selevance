@@ -3,6 +3,10 @@ package org.openqa.selevance.util;
 import org.apache.commons.lang.StringUtils;
 import org.testng.annotations.Test;
 
+/**
+ * @author Tanmay Sarkar
+ *
+ */
 public class StringManipulator {
 	
 	public String trim_String_Length(String text, int stringLimit){

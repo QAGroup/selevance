@@ -25,7 +25,7 @@ import org.openqa.selenium.safari.SafariDriver;
 /**
  * Selevance WebDriver 
  * @since 6th March 2015
- * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ * @author Tanmay Sarkar
  */
 public class Plus extends GlobalExtn{
 	private WebDriver driver;

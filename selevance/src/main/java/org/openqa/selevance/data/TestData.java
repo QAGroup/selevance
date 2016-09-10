@@ -22,7 +22,7 @@ import org.testng.annotations.DataProvider;
 
 /**
  * Read XLSX/XLS/XML/CSV/JSON File for Test data
- * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ * @author Tanmay Sarkar
  * @since 6th March 2015
  */
 public class TestData extends GlobalExtn{

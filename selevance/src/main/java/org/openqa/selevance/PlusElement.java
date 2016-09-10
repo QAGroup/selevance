@@ -17,7 +17,7 @@ import org.openqa.selevance.util.Util;
 
 /**
  * WebElement Helper
- * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+ * @author Tanmay Sarkar
  */
 public class PlusElement {
 

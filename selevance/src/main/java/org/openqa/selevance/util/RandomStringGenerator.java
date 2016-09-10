@@ -2,6 +2,10 @@ package org.openqa.selevance.util;
 
 import java.util.Random;
 
+/**
+ * @author Tanmay Sarkar
+ *
+ */
 public class RandomStringGenerator {
 	public static enum Mode {
 	    ALPHA, ALPHANUMERIC, NUMERIC 
