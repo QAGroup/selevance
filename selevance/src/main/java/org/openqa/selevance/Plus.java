@@ -29,11 +29,14 @@ import org.openqa.selenium.safari.SafariDriver;
  */
 public class Plus extends GlobalExtn{
 	private WebDriver driver;
-	private Properties prop = new Properties();
+	protected Properties prop = new Properties();
 	private InputStream input = null;
 	String browserName ="";
 	String ffPlugIn = null;
 	
+	public Plus(){
+		setBrowser(null);
+	}
 	public Plus(String propPath){
 		setBrowser(propPath);
 	}	
