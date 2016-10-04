@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -167,19 +168,89 @@ public class PlusElement {
 				System.out.println("Javascript Error : " + ex.getMessage());
 			}
 		}return false;
-	}
+	}	
 	public void ieClick(WebDriver driver,WebElement w ){
 		try{
 			w.click();
 			w.sendKeys(Keys.ENTER);
 			JavascriptExecutor executor2 = (JavascriptExecutor) driver;
 	        executor2.executeScript("arguments[0].click();", w);	        		
+		}catch(org.openqa.selenium.UnhandledAlertException ex){
+			try {
+		        Alert alert = driver.switchTo().alert();
+		        System.out.println("Alert data: " + alert.getText());
+		        alert.accept();
+		    }catch (org.openqa.selenium.NoAlertPresentException e) {
+		        //System.out.println("No Alert present");
+		    }catch (Exception e) {
+		        e.printStackTrace();
+		    }
 		}catch(org.openqa.selenium.StaleElementReferenceException ex){
 			//System.out.println("Info ieClick 001 : Page is navigating");
+		}catch(org.openqa.selenium.ElementNotVisibleException ex){
+			//System.out.println("Info ieClick 001 : Element is not displayed");
+		}catch(org.openqa.selenium.InvalidElementStateException ex){
+			//System.out.println("Info ieClick 001 : Element is not enabled");
 		}catch(Exception e){
 			System.out.println("Error ieClick 001");
 			e.printStackTrace();
 		}
+	}
+	public void ieSoftClick(WebDriver driver,WebElement w ){
+		try{
+			w.click();
+			JavascriptExecutor executor2 = (JavascriptExecutor) driver;
+	        executor2.executeScript("arguments[0].click();", w);	        		
+		}catch(org.openqa.selenium.UnhandledAlertException ex){
+			try {
+		        Alert alert = driver.switchTo().alert();
+		        System.out.println("Alert data: " + alert.getText());
+		        alert.accept();
+		    }catch (org.openqa.selenium.NoAlertPresentException e) {
+		        //System.out.println("No Alert present");
+		    }catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}catch(org.openqa.selenium.StaleElementReferenceException ex){
+			//System.out.println("Info ieClick 001 : Page is navigating");
+		}catch(org.openqa.selenium.ElementNotVisibleException ex){
+			//System.out.println("Info ieClick 001 : Element is not displayed");
+		}catch(org.openqa.selenium.InvalidElementStateException ex){
+			//System.out.println("Info ieClick 001 : Element is not enabled");
+		}catch(Exception e){
+			System.out.println("Error ieClick 001");
+			e.printStackTrace();
+		}
+	}
+	public void ieSoftSwitchClick(WebDriver driver,WebElement w ){
+		try{
+			JavascriptExecutor executor2 = (JavascriptExecutor) driver;
+	        executor2.executeScript("arguments[0].click();", w);
+		}catch(org.openqa.selenium.UnhandledAlertException ex){
+			//System.out.println("Info ieClick 001 : Page is navigating");
+		}catch(org.openqa.selenium.StaleElementReferenceException ex){
+			//System.out.println("Info ieClick 002 : Page is navigating");
+		}catch(org.openqa.selenium.ElementNotVisibleException ex){
+			//System.out.println("Info ieClick 003 : Element is not displayed");
+		}catch(org.openqa.selenium.InvalidElementStateException ex){
+			//System.out.println("Info ieClick 004 : Element is not enabled");
+		}catch(Exception e){
+			//System.out.println("Error ieClick 005");
+			e.printStackTrace();
+		}
+	}
+	public boolean waitForAlertAccept(WebDriver driver){
+		for (int i=0; i<GlobalExtn.MAX_ALERT_WAIT; i++){ 
+			Util.sleep(1000); 
+			try{
+				Alert alert = driver.switchTo().alert();	            
+	            System.out.println(alert.getText());
+	            alert.accept(); 
+	            break;
+			}catch(Exception ex){
+				//System.out.println("Alert Not Found : " + ex.getMessage());
+				System.out.println("Alert Not Found : "+ i + " times");
+			}
+		}return false;
 	}	
-	
 }
