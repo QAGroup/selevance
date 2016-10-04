@@ -17,6 +17,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -146,6 +148,16 @@ public class Plus extends GlobalExtn{
 			System.setProperty("webdriver.chrome.driver", PROPFILEPATH+ChromeDRIVER);
 			WebDriver driver = new ChromeDriver();
 			driver.manage().window().maximize();
+			return driver;
+		}else if(browserName.toUpperCase().contains(Browser.List.PHANTOMJS.name())){
+			System.setProperty(PhantomJSDriverService.class.getName(),"OFF");
+			DesiredCapabilities caps = new DesiredCapabilities();
+			caps.setJavascriptEnabled(true);
+			caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, PROPFILEPATH+PHANTOMDRIVER);
+			System.setProperty("phantomjs.binary.path",PROPFILEPATH+PHANTOMDRIVER);
+			String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0";
+			System.setProperty("phantomjs.page.settings.userAgent", userAgent);
+			WebDriver driver = new PhantomJSDriver(caps);
 			return driver;
 		}else{
 			return null;
