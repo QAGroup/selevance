@@ -111,6 +111,17 @@ public class Sample {
 	}
 	
 	
+	@Test(description = "Sample Test case with XLSX Test data", 
+			dataProviderClass= TestData.class,
+			dataProvider = "SETPRIORITY" )
+	@SelevanceBasic(file = "src/test/resources/data/data1.xlsx", 
+			sheet ="Sheet2" , format ="FIRSTYES")	
+	@SelevanceDB(source = "testdb1")
+	public void doTest10(HashMap<String, String> testdata){		
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		System.out.println(name);
+	}
+	
 	public void commonTest(String name){
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);

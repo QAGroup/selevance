@@ -147,8 +147,8 @@ public class TestData extends GlobalExtn{
 	@DataProvider(name = "COUCH", parallel = true)
 	public static Object[][] couchProvider(Method method) {
 		SelevanceDB testData = method.getAnnotation(SelevanceDB.class);	
-		String tableName =testData.source().toLowerCase();
-		if(tableName.trim().length() == 0 || tableName.trim().length() == 0){
+		String databaseName =testData.source().toLowerCase();
+		if(databaseName.trim().length() == 0 || databaseName.trim().length() == 0){
 			throw new SkipException(method.getName() + " : All Parameters are required");
 		}		
 		try {
@@ -157,14 +157,28 @@ public class TestData extends GlobalExtn{
 			Properties prop = new Properties();
 			prop.load(input);
 			String host = prop.getProperty("CHost") ;
-			return DBFile.couchReader(host,tableName);
+			//-----------Override databaseName from VM Args ---------
+			try{
+				if(System.getProperty("CDB")!=null){
+					databaseName = System.getProperty("CDB");
+				}
+			}catch(Exception ex){}
+			//-----------Override databaseName from VM Args ---------
+			return DBFile.couchReader(host,databaseName);
 			
 		} catch (Exception e) {
 			System.out.println("Property File not Declared");
 			try{
 				System.out.println("Loading Data From VM args");
 				String host = System.getProperty("Host") ;
-				return DBFile.couchReader(host,tableName);		
+				//-----------Override databaseName from VM Args ---------
+				try{
+					if(System.getProperty("CDB")!=null){
+						databaseName = System.getProperty("CDB");
+					}
+				}catch(Exception ex){}
+				//-----------Override databaseName from VM Args ---------
+				return DBFile.couchReader(host,databaseName);		
 			}catch(Exception ex){
 				System.out.println("VM Args not specified");
 				return null;
