@@ -111,7 +111,7 @@ public class Sample {
 	}
 	
 	
-	@Test(description = "Sample Test case with XLSX Test data", 
+	@Test(description = "Sample Test case with XLSX Test data or CouchDB", 
 			dataProviderClass= TestData.class,
 			dataProvider = "SETPRIORITY" )
 	@SelevanceBasic(file = "src/test/resources/data/data1.xlsx", 

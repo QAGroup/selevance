@@ -2,7 +2,6 @@ package org.openqa.selevance.data;
 
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,10 +27,10 @@ import org.testng.annotations.DataProvider;
 public class TestData extends GlobalExtn{
 	
 	/**
-	 * @param String file : Test Data file name (*.xls / *.xlsx / *.csv / *.json) <br/>
-	 * @param String sheet : For excel sheet name , use node name for XML	<br/>
-	 * @since 6th March 2015
 	 * @author <a href='mailto:me@tanmaysarkar.com'>Tanmay Sarkar</a>
+	 * @since 6th March 2015
+	 * @param String file: Test Data file (*.xls/*.xlsx/*.csv/*.json)
+	 * @param String sheet: Excel sheet name or XML Node name 
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.METHOD})
@@ -99,6 +98,9 @@ public class TestData extends GlobalExtn{
 		
 	}
 
+	/**
+	 * @author Tanmay Sarkar
+	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.METHOD})
 	public @interface SelevanceDB
@@ -126,6 +128,33 @@ public class TestData extends GlobalExtn{
 			String user = prop.getProperty("User") ;
 			String pwd = prop.getProperty("Password");
 			String db = prop.getProperty("Database");
+			//-----------Override Each value from VM Args ---------
+			try{
+				if(System.getProperty("Host")!=null){
+					host = System.getProperty("Host");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("User")!=null){
+					user = System.getProperty("User");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("Password")!=null){
+					pwd = System.getProperty("Password");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("Database")!=null){
+					db = System.getProperty("Database");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("Table")!=null){
+					tableName = System.getProperty("Table");
+				}
+			}catch(Exception ex){}
+			//-----------Override Each value from VM Args ---------
 			return DBFile.mysqlReader(host,user,pwd,db,tableName);
 			
 		} catch (Exception e) {
@@ -136,6 +165,13 @@ public class TestData extends GlobalExtn{
 				String user = System.getProperty("User") ;
 				String pwd = System.getProperty("Password");
 				String db = System.getProperty("Database");
+				//-----------Override Each value from VM Args ---------
+				try{
+					if(System.getProperty("Table")!=null){
+						tableName = System.getProperty("Table");
+					}
+				}catch(Exception ex){}
+				//-----------Override Each value from VM Args ---------
 				return DBFile.mysqlReader(host,user,pwd,db,tableName);			
 			}catch(Exception ex){
 				System.out.println("VM Args not specified");
@@ -199,6 +235,23 @@ public class TestData extends GlobalExtn{
 			prop.load(input);
 			String gid = prop.getProperty("GID") ;
 			String gpd = prop.getProperty("GPW") ;
+			//-----------Override Each value from VM Args ---------
+			try{
+				if(System.getProperty("GID")!=null){
+					gid = System.getProperty("GID");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("GPW")!=null){
+					gpd = System.getProperty("GPW");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("GSheet")!=null){
+					spreadsheet = System.getProperty("GSheet");
+				}
+			}catch(Exception ex){}
+			//-----------Override Each value from VM Args ---------
 			return DBFile.gSpreadSheetReader(gid,gpd,spreadsheet);
 			
 		} catch (Exception e) {
@@ -207,6 +260,13 @@ public class TestData extends GlobalExtn{
 				System.out.println("Loading Data From VM args");
 				String gid = System.getProperty("GID") ;
 				String gpd = System.getProperty("GPW") ;
+				//-----------Override Each value from VM Args ---------
+				try{
+					if(System.getProperty("GSheet")!=null){
+						spreadsheet = System.getProperty("GSheet");
+					}
+				}catch(Exception ex){}
+				//-----------Override Each value from VM Args ---------
 				return DBFile.gSpreadSheetReader(gid,gpd,spreadsheet);	
 			}catch(Exception ex){
 				System.out.println("VM Args not specified");
@@ -229,14 +289,38 @@ public class TestData extends GlobalExtn{
 			prop.load(input);
 			String host = prop.getProperty("MHost") ;
 			String db = prop.getProperty("MDataBase") ;
+			//-----------Override Each value from VM Args ---------
+			try{
+				if(System.getProperty("MHost")!=null){
+					host = System.getProperty("MHost");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("MDataBase")!=null){
+					db = System.getProperty("MDataBase");
+				}
+			}catch(Exception ex){}
+			try{
+				if(System.getProperty("MTable")!=null){
+					tableName = System.getProperty("MTable");
+				}
+			}catch(Exception ex){}
+			//-----------Override Each value from VM Args ---------
 			return DBFile.mongoReader(host,db,tableName);
 			
 		} catch (Exception e) {
 			System.out.println("Property File not Declared");
 			try{
 				System.out.println("Loading Data From VM args");
-				String host = System.getProperty("Host") ;
-				String db = System.getProperty("DataBase") ;
+				String host = System.getProperty("MHost") ;
+				String db = System.getProperty("MDataBase") ;
+				//-----------Override Each value from VM Args ---------
+				try{
+					if(System.getProperty("MTable")!=null){
+						tableName = System.getProperty("MTable");
+					}
+				}catch(Exception ex){}
+				//-----------Override Each value from VM Args ---------
 				return DBFile.mongoReader(host,db,tableName);		
 			}catch(Exception ex){
 				System.out.println("VM Args not specified");
