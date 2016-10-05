@@ -16,13 +16,14 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
+//import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import com.opera.core.systems.OperaDriver;
 
 /**
  * Selevance WebDriver 
@@ -100,6 +101,7 @@ public class Plus extends GlobalExtn{
 		return browserName;
 	}
 	private WebDriver theBrowser(String browserName){		
+		System.out.println("Given: " +browserName);
 		if(browserName.toUpperCase().contains(Browser.List.FIREFOX.name())){			
 			if(ffPlugIn!=null){
 				FirefoxProfile profile = new FirefoxProfile(); 
@@ -143,7 +145,7 @@ public class Plus extends GlobalExtn{
 		}else if(browserName.toUpperCase().contains(Browser.List.OPERA.name())){
 			driver = new OperaDriver();
 			driver.manage().window().maximize();
-			return driver;
+			return driver;			
 		}else if(browserName.toUpperCase().contains(Browser.List.CHROME.name())){
 			System.setProperty("webdriver.chrome.driver", PROPFILEPATH+ChromeDRIVER);
 			WebDriver driver = new ChromeDriver();
