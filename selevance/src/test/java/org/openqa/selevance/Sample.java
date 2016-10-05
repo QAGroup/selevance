@@ -122,6 +122,18 @@ public class Sample {
 		System.out.println(name);
 	}
 	
+	
+	@Test(description = "Sample Test case with XLSX Test data", 
+			dataProviderClass= TestData.class,
+			dataProvider = "STANDARD" ,
+			retryAnalyzer = Retry.class)
+	@SelevanceBasic(file = "src/test/resources/data/data1.xlsx", 
+			sheet ="Sheet2" , format ="FIRSTYES")
+	public void doTest11(HashMap<String, String> testdata){		
+		String name = testdata.get("Fname") + " " +testdata.get("Lname") ;
+		commonTest(name);
+	}
+	
 	public void commonTest(String name){
 		baseUrl = "http://google.co.in";		
 		Plus plus = new Plus(globalConfig);
