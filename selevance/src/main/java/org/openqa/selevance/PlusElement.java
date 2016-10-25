@@ -1,19 +1,23 @@
 package org.openqa.selevance;
 
 import java.io.IOException;
-
+import java.util.Iterator;
+import java.util.Set;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selevance.exception.PageLoadException;
 import org.openqa.selevance.util.Util;
 
 /**
@@ -139,15 +143,29 @@ public class PlusElement {
 	public boolean waitForPageLoad(WebDriver driver){
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		int i;
+		String msg = null;
 		for (i=0; i<GlobalExtn.MAX_TIME_OUT; i++){ 
 			Util.sleep(1000); 
 			try{
 				if (js.executeScript("return document.readyState").toString().equals("complete")){ 
 					//System.out.println("Current ittararion : "+ i);
-					return true;				
+					//return true;		
+					msg = PageError.getError(driver);
+					if (msg.contains("200")) {
+						System.out.println("Page laoded at " + i + " hit");
+						return true;
+					} else {
+						// System.out.println(msg);
+						if (i == GlobalExtn.MAX_TIME_OUT - 1) {
+							throw new PageLoadException(GlobalExtn.MAX_TIME_OUT, msg);
+						}
+					}
 				}else{
 					//System.out.println("Check : "+js.executeScript("return document.readyState").toString());
 				}   
+			}catch (org.openqa.selenium.UnhandledAlertException ex) {
+				System.out.println("UnhandledAlertException");
+				// waitForAlertAccept(driver);
 			}catch(Exception ex){
 				System.out.println("Javascript Error : " + ex.getMessage());
 			}
@@ -156,14 +174,27 @@ public class PlusElement {
 	public boolean waitForPageLoad(WebDriver driver,int time){
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		int i;
+		String msg = null;
 		for (i=0; i<time; i++){ 
 			Util.sleep(1000); 
 			try{
 				if (js.executeScript("return document.readyState").toString().equals("complete")){ 
-					return true;				
+					msg = PageError.getError(driver);
+					System.out.println("Err: " + msg);
+					if (msg.contains("200")) {
+						return true;
+					} else {
+						//System.out.println(msg);
+						if (i == GlobalExtn.MAX_TIME_OUT - 1) {
+							throw new PageLoadException(GlobalExtn.MAX_TIME_OUT, msg);
+						}
+					}		
 				}else{
 					//System.out.println("Check : "+js.executeScript("return document.readyState").toString());
 				}   
+			}catch (org.openqa.selenium.UnhandledAlertException ex) {
+				System.out.println("UnhandledAlertException");
+				// waitForAlertAccept(driver);
 			}catch(Exception ex){
 				System.out.println("Javascript Error : " + ex.getMessage());
 			}
@@ -253,4 +284,75 @@ public class PlusElement {
 			}
 		}return false;
 	}	
+	public String switchTOChild(WebDriver driver) {
+		String parentWindowHandler = driver.getWindowHandle(); // Store parent window
+		String subWindowHandler = null;
+		String outer = parentWindowHandler;
+		System.out.println("Parent " + parentWindowHandler);
+		Util.sleep(3000);
+		Set<String> handles = driver.getWindowHandles(); // get all window handles
+		Iterator<String> iterator = handles.iterator();
+		while (iterator.hasNext()) {
+			// subWindowHandler = iterator.next();
+			outer = iterator.next();
+			if (!outer.contains(parentWindowHandler)) {
+				subWindowHandler = outer;
+			}
+			System.out.println("Inner : " + subWindowHandler);
+		}
+		System.out.println("Child " + subWindowHandler);
+		driver.switchTo().window(subWindowHandler); // switch to popup window
+		return parentWindowHandler;
+	}
+	
+	public WebElement loadElement(WebDriver driver ,By locator) {
+		int attempts = 1;
+		int max = 3;
+		while (attempts < max) {
+			try {
+				WebDriverWait wait = new WebDriverWait(driver, GlobalExtn.TIMEOUT);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+				return driver.findElement(locator);
+			} catch (TimeoutException te) {
+				if (attempts == max) {
+					return null;
+				}
+			} catch (NoSuchElementException nse) {
+				if (attempts == max) {
+					return null;
+				}
+			}finally{
+				attempts++;
+			}
+		}
+		return null;
+	}
+	public WebElement loadElement(WebDriver driver, String loc) {
+		By locator = locator(loc);
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, GlobalExtn.TIMEOUT);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			return driver.findElement(locator);
+		} catch (TimeoutException te) {
+			return null;
+		} catch (NoSuchElementException nse) {
+			return null;
+		}
+	}
+	private By locator(String location) {
+		String[] parts = location.split("::");
+		String typ = parts[0];
+		String locator = parts[1];
+		switch (typ.toLowerCase()) {
+		case "css":
+			return By.cssSelector(locator);
+		case "xpath":
+			return By.xpath(locator);
+		case "id":
+			return By.id(locator);
+		case "name":
+			return By.name(locator);
+		}
+		return null;
+	}
 }

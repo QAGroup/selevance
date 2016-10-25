@@ -58,6 +58,9 @@ public class PageError {
 		}else if(title.contains("511")){
 			respMsg = "511  Network Authentication Required";
 			driver.navigate().refresh();
+		}else if(title.contains("Exception of type")){
+			respMsg = "Server Error in Microsoft .NET Framework ";
+			driver.navigate().refresh();
 		}else{
 			respMsg = "200";
 		}

@@ -16,4 +16,5 @@ public class GlobalExtn extends Agents{
 	final String ChromeDRIVER = "chromedriver.exe";
 	final String PHANTOMDRIVER ="phantomjs.exe";
 	final String ffagent = "general.useragent.override";
+	public static final int TIMEOUT =30;
 }
